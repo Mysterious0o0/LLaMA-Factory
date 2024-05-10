@@ -5,13 +5,15 @@
 [![GitHub last commit](https://img.shields.io/github/last-commit/hiyouga/LLaMA-Factory)](https://github.com/hiyouga/LLaMA-Factory/commits/main)
 [![PyPI](https://img.shields.io/pypi/v/llmtuner)](https://pypi.org/project/llmtuner/)
 [![Downloads](https://static.pepy.tech/badge/llmtuner)](https://pypi.org/project/llmtuner/)
-[![Citation](https://img.shields.io/badge/citation-42-green)](#使用了-llama-factory-的项目)
+[![Citation](https://img.shields.io/badge/citation-43-green)](#使用了-llama-factory-的项目)
 [![GitHub pull request](https://img.shields.io/badge/PRs-welcome-blue)](https://github.com/hiyouga/LLaMA-Factory/pulls)
 [![Discord](https://dcbadge.vercel.app/api/server/rKfvV9r9FK?compact=true&style=flat)](https://discord.gg/rKfvV9r9FK)
 [![Twitter](https://img.shields.io/twitter/follow/llamafactory_ai)](https://twitter.com/llamafactory_ai)
 [![Spaces](https://img.shields.io/badge/🤗-Open%20in%20Spaces-blue)](https://huggingface.co/spaces/hiyouga/LLaMA-Board)
 [![Studios](https://img.shields.io/badge/ModelScope-Open%20in%20Studios-blue)](https://modelscope.cn/studios/hiyouga/LLaMA-Board)
 [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/drive/1d5KQtbemerlSDSxZIfAaWXhKr30QypiK?usp=sharing)
+
+[![GitHub Tread](https://trendshift.io/api/badge/repositories/4535)](https://trendshift.io/repositories/4535)
 
 👋 加入我们的[微信群](assets/wechat.jpg)。
 
@@ -143,7 +145,7 @@ https://github.com/hiyouga/LLaMA-Factory/assets/16256802/ec36a9dd-37f4-4f72-81bd
 | [BLOOMZ](https://huggingface.co/bigscience)              | 560M/1.1B/1.7B/3B/7.1B/176B      | query_key_value   | -         |
 | [ChatGLM3](https://huggingface.co/THUDM)                 | 6B                               | query_key_value   | chatglm3  |
 | [Command-R](https://huggingface.co/CohereForAI)          | 35B/104B                         | q_proj,v_proj     | cohere    |
-| [DeepSeek (MoE)](https://huggingface.co/deepseek-ai)     | 7B/16B/67B                       | q_proj,v_proj     | deepseek  |
+| [DeepSeek (MoE)](https://huggingface.co/deepseek-ai)     | 7B/16B/67B/236B                  | q_proj,v_proj     | deepseek  |
 | [Falcon](https://huggingface.co/tiiuae)                  | 7B/40B/180B                      | query_key_value   | falcon    |
 | [Gemma/CodeGemma](https://huggingface.co/google)         | 2B/7B                            | q_proj,v_proj     | gemma     |
 | [InternLM2](https://huggingface.co/internlm)             | 7B/20B                           | wqkv              | intern2   |
@@ -163,7 +165,7 @@ https://github.com/hiyouga/LLaMA-Factory/assets/16256802/ec36a9dd-37f4-4f72-81bd
 | [Yuan](https://huggingface.co/IEITYuan)                  | 2B/51B/102B                      | q_proj,v_proj     | yuan      |
 
 > [!NOTE]
-> **默认模块**应作为 `--lora_target` 参数的默认值，可使用 `--lora_target all` 参数指定全部模块以得到更好的效果。
+> **默认模块**应作为 `--lora_target` 参数的默认值，可使用 `--lora_target all` 参数指定全部模块以取得更好的效果。
 >
 > 对于所有“基座”（Base）模型，`--template` 参数可以是 `default`, `alpaca`, `vicuna` 等任意值。但“对话”（Instruct/Chat）模型请务必使用**对应的模板**。
 >
@@ -205,8 +207,8 @@ https://github.com/hiyouga/LLaMA-Factory/assets/16256802/ec36a9dd-37f4-4f72-81bd
 - [Stanford Alpaca (en)](https://github.com/tatsu-lab/stanford_alpaca)
 - [Stanford Alpaca (zh)](https://github.com/ymcui/Chinese-LLaMA-Alpaca)
 - [Alpaca GPT4 (en&zh)](https://github.com/Instruction-Tuning-with-GPT-4/GPT-4-LLM)
-- [Self Cognition (zh)](data/self_cognition.json)
-- [Open Assistant (multilingual)](https://huggingface.co/datasets/OpenAssistant/oasst1)
+- [Identity (en&zh)](data/identity.json)
+- [Open Assistant (zh)](https://huggingface.co/datasets/OpenAssistant/oasst1)
 - [ShareGPT (zh)](https://huggingface.co/datasets/QingyiSi/Alpaca-CoT/tree/main/Chinese-instruction-collection)
 - [Guanaco Dataset (multilingual)](https://huggingface.co/datasets/JosephusCheung/GuanacoDataset)
 - [BELLE 2M (zh)](https://huggingface.co/datasets/BelleGroup/train_2M_CN)
@@ -254,11 +256,11 @@ https://github.com/hiyouga/LLaMA-Factory/assets/16256802/ec36a9dd-37f4-4f72-81bd
 <details><summary>偏好数据集</summary>
 
 - [HH-RLHF (en)](https://huggingface.co/datasets/Anthropic/hh-rlhf)
-- [Open Assistant (multilingual)](https://huggingface.co/datasets/OpenAssistant/oasst1)
 - [GPT-4 Generated Data (en&zh)](https://github.com/Instruction-Tuning-with-GPT-4/GPT-4-LLM)
 - [Orca DPO (en)](https://huggingface.co/datasets/Intel/orca_dpo_pairs)
 - [Nectar (en)](https://huggingface.co/datasets/berkeley-nest/Nectar)
 - [DPO mixed (en&zh)](https://huggingface.co/datasets/hiyouga/DPO-En-Zh-20k)
+- [Open Assistant (zh)](https://huggingface.co/datasets/OpenAssistant/oasst1)
 - [Orca DPO (de)](https://huggingface.co/datasets/mayflowergmbh/intel_orca_dpo_pairs_de)
 
 </details>
@@ -276,18 +278,19 @@ huggingface-cli login
 | ------------ | ------- | --------- |
 | python       | 3.8     | 3.10      |
 | torch        | 1.13.1  | 2.2.0     |
-| transformers | 4.37.2  | 4.39.3    |
-| datasets     | 2.14.3  | 2.18.0    |
-| accelerate   | 0.27.2  | 0.28.0    |
+| transformers | 4.37.2  | 4.40.1    |
+| datasets     | 2.14.3  | 2.19.1    |
+| accelerate   | 0.27.2  | 0.30.0    |
 | peft         | 0.9.0   | 0.10.0    |
-| trl          | 0.8.1   | 0.8.1     |
+| trl          | 0.8.1   | 0.8.6     |
 
 | 可选项       | 至少     | 推荐      |
 | ------------ | ------- | --------- |
 | CUDA         | 11.6    | 12.2      |
 | deepspeed    | 0.10.0  | 0.14.0    |
-| bitsandbytes | 0.39.0  | 0.43.0    |
-| flash-attn   | 2.3.0   | 2.5.6     |
+| bitsandbytes | 0.39.0  | 0.43.1    |
+| vllm         | 0.4.0   | 0.4.2     |
+| flash-attn   | 2.3.0   | 2.5.8     |
 
 ### 硬件依赖
 
@@ -305,24 +308,21 @@ huggingface-cli login
 
 ## 如何使用
 
-### 数据准备
+### 安装 LLaMA Factory
 
-关于数据集文件的格式，请参考 [data/README_zh.md](data/README_zh.md) 的内容。你可以使用 HuggingFace / ModelScope 上的数据集或加载本地数据集。
-
-> [!NOTE]
-> 使用自定义数据集时，请更新 `data/dataset_info.json` 文件。
-
-### 安装依赖
+> [!IMPORTANT]
+> 此步骤为必需。
 
 ```bash
 git clone https://github.com/hiyouga/LLaMA-Factory.git
-conda create -n llama_factory python=3.10
-conda activate llama_factory
 cd LLaMA-Factory
-pip install -e .[metrics]
+pip install -e .[torch,metrics]
 ```
 
-可选的额外依赖项：deepspeed、metrics、galore、badam、vllm、bitsandbytes、gptq、awq、aqlm、qwen、modelscope、quality
+可选的额外依赖项：torch、metrics、deepspeed、bitsandbytes、vllm、galore、badam、gptq、awq、aqlm、qwen、modelscope、quality
+
+> [!TIP]
+> 遇到包冲突时，可使用 `pip install --no-deps -e .` 解决。
 
 <details><summary>Windows 用户指南</summary>
 
@@ -336,19 +336,38 @@ pip install https://github.com/jllllll/bitsandbytes-windows-webui/releases/downl
 
 </details>
 
-### 利用 LLaMA Board 可视化界面训练（由 [Gradio](https://github.com/gradio-app/gradio) 驱动）
+### 数据准备
+
+关于数据集文件的格式，请参考 [data/README_zh.md](data/README_zh.md) 的内容。你可以使用 HuggingFace / ModelScope 上的数据集或加载本地数据集。
+
+> [!NOTE]
+> 使用自定义数据集时，请更新 `data/dataset_info.json` 文件。
+
+### 快速开始
+
+下面三行命令分别对 Llama3-8B-Instruct 模型进行 LoRA **微调**、**推理**和**合并**。
+
+```bash
+CUDA_VISIBLE_DEVICES=0 llamafactory-cli train examples/lora_single_gpu/llama3_lora_sft.yaml
+CUDA_VISIBLE_DEVICES=0 llamafactory-cli chat examples/inference/llama3_lora_sft.yaml
+CUDA_VISIBLE_DEVICES=0 llamafactory-cli export examples/merge_lora/llama3_lora_sft.yaml
+```
+
+高级用法请参考 [examples/README_zh.md](examples/README_zh.md)（包括多 GPU 微调）。
+
+> [!TIP]
+> 使用 `llamafactory-cli help` 显示帮助信息。
+
+### LLaMA Board 可视化微调（由 [Gradio](https://github.com/gradio-app/gradio) 驱动）
 
 > [!IMPORTANT]
-> LLaMA Board 可视化界面目前仅支持单 GPU 训练，请使用[命令行接口](#利用命令行接口训练)来进行多 GPU 分布式训练。
+> LLaMA Board 可视化界面目前仅支持单 GPU 训练。
 
 #### 使用本地环境
 
 ```bash
-llamafactory-cli webui
+CUDA_VISIBLE_DEVICES=0 GRADIO_SHARE=1 llamafactory-cli webui
 ```
-
-> [!TIP]
-> 您可以使用环境变量来修改 LLaMA Board 可视化界面的默认设置，例如 `export CUDA_VISIBLE_DEVICES=0 GRADIO_SERVER_NAME=0.0.0.0 GRADIO_SERVER_PORT=7860 GRADIO_SHARE=False`（Windows 系统可使用 `set` 指令）。
 
 <details><summary>阿里云用户指南</summary>
 
@@ -389,21 +408,10 @@ docker compose -f ./docker-compose.yml up -d
 
 </details>
 
-### 利用命令行接口训练
-
-使用方法请参考 [examples/README_zh.md](examples/README_zh.md)。
-
-> [!TIP]
-> 您可以执行 `llamafactory-cli train -h` 来查看参数文档。
-
 ### 利用 vLLM 部署 OpenAI API
 
 ```bash
-CUDA_VISIBLE_DEVICES=0,1 API_PORT=8000 llamafactory-cli api \
-    --model_name_or_path meta-llama/Meta-Llama-3-8B-Instruct \
-    --template llama3 \
-    --infer_backend vllm \
-    --vllm_enforce_eager
+CUDA_VISIBLE_DEVICES=0,1 API_PORT=8000 llamafactory-cli api examples/inference/llama3_vllm.yaml
 ```
 
 ### 从魔搭社区下载
@@ -464,6 +472,7 @@ export USE_MODELSCOPE_HUB=1 # Windows 使用 `set USE_MODELSCOPE_HUB=1`
 1. **[Sunsimiao](https://github.com/thomas-yanxin/Sunsimiao)**: 孙思邈中文医疗大模型 Sumsimiao，基于 Baichuan-7B 和 ChatGLM-6B 在中文医疗数据上微调而得。
 1. **[CareGPT](https://github.com/WangRongsheng/CareGPT)**: 医疗大模型项目 CareGPT，基于 LLaMA2-7B 和 Baichuan-13B 在中文医疗数据上微调而得。
 1. **[MachineMindset](https://github.com/PKU-YuanGroup/Machine-Mindset/)**：MBTI性格大模型项目，根据数据集与训练方式让任意 LLM 拥有 16 个不同的性格类型。
+1. **[Luminia-13B-v3](https://huggingface.co/Nekochu/Luminia-13B-v3)**：一个用于生成 Stable Diffusion 提示词的大型语言模型。[[🤗Demo]](https://huggingface.co/spaces/Nekochu/Luminia-13B_SD_Prompt)
 
 </details>
 
