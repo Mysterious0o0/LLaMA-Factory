@@ -167,5 +167,4 @@ cache/
 *.xlsx
 *.log
 *.txt
-*.json
 *.DS_Store
