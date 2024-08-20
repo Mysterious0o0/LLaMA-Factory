@@ -117,21 +117,21 @@ class DocxProcess:
         return lines
 
 
-def read_lmdb(env, proj_id):
+def read_lmdb(env, proj_id, prefix="requirement"):
     txn = env.begin(write=False)
-    samplenum = int(txn.get(b"samplenum").decode("utf-8"))
-    log.info("samplenum: %d" % samplenum)
-    requirement = txn.get(("requirement-%s" % proj_id).encode("utf-8"))
+    # samplenum = int(txn.get(b"samplenum").decode("utf-8"))
+    # log.info("samplenum: %d" % samplenum)
+    requirement = txn.get(("%s-%s" % (prefix, proj_id)).encode("utf-8"))
     if requirement:
         return requirement.decode("utf-8")
     return None
 
 
-def export_lmdb(env, requirements, batch=10000):
+def export_lmdb(env, requirements, batch=10000, prefix="requirement"):
     txn = env.begin(write=True)
     process_idx = 0
     for proj_id, requirement in requirements:
-        requirement_index = "requirement-%s" % proj_id
+        requirement_index = "%s-%s" % (prefix, proj_id)
         txn.put(requirement_index.encode("utf-8"), requirement.encode("utf-8"))
         if process_idx % batch == 0:
             # print('process idx: %d' % process_idx)
@@ -149,10 +149,11 @@ def export_lmdb(env, requirements, batch=10000):
     txn.commit()
 
 
-def get_valuable_info_by_excel(excel_path, columns=None):
+def get_valuable_info_by_excel(excel_path, columns=["功能序号", "用例名称", "用例性质", "步骤", "预期结果"]):
     original_data = pd.read_excel(excel_path)
-    if columns:
+    if columns and set(columns).issubset(set(original_data.columns)):
         original_data = original_data[columns]
+        original_data["步骤"] = original_data["步骤"].str.replace(" ", "")
     # 去重
     df_deduped = original_data.drop_duplicates(subset=["功能序号", "用例名称", "用例性质"])
     for row in df_deduped.iloc():

@@ -1,6 +1,7 @@
 import json
 import os
 import re
+from collections import defaultdict
 from glob import glob
 from io import BytesIO
 from random import shuffle
@@ -15,7 +16,7 @@ from wenzhouData.utils import DocxProcess, export_lmdb, get_valuable_info_by_exc
 
 
 temp_format = {
-    "instruction": """你是一个测试工程师，请根据输入的需求描述生成对应的'用例名称', '用例性质', '步骤', '预期结果',生成的内容以json的形式返回""",
+    "instruction": """根据输入的需求描述生成对应的'用例名称', '用例性质', '步骤', '预期结果',输入信息是markdown格式的描述文本,生成的内容以json的形式返回。具体生成步骤如下:""",
     "input": "",
     "output": "",
     "system": "测试工程师",
@@ -73,12 +74,13 @@ def get_docx_data(filename, binary=None, from_page=0, to_page=100000):
     if re.search(r"\.docx$", filename, re.IGNORECASE):
         docx = Docx()
         for data in docx(filename, binary, from_page=from_page, to_page=to_page):
-            pattern = r"\【PROJ(?:-\d+)+\】"
+            print(data)
+            pattern = r"卍(.*?)卍"
             match = re.search(pattern, data[0])
             if match:
-                proj_id = match.group().strip("【】")
+                proj_id = match.group().replace("卍", "") + filename.split("/")[-1].replace(".docx", "")
                 data[0] = data[0].replace(match.group(), "")
-                requirements.append((proj_id, "".join(data)))
+                requirements.append((proj_id.lower(), "".join(data)))
                 log.info(proj_id)
             else:
                 log.warning("No match found for PROJ.")
@@ -100,6 +102,16 @@ def export_db():
     log.info("Elapsed time during the whole program in seconds: %f" % (perf_counter() - s))
 
 
+def merge_data_for_excel():
+    case_dict = defaultdict(list)
+    excel_path = "wenzhouData"
+    excel_columns = ["功能序号", "用例名称", "用例性质", "步骤", "预期结果"]
+    for excel_file in tqdm(glob(os.path.join(excel_path, "*.xlsx"))):
+        for rows in get_valuable_info_by_excel(excel_file, excel_columns):
+            prod_id = rows["功能序号"] + excel_file.split("/")[-1].replace(".xlsx", "")
+            case_dict[prod_id].append(rows[excel_columns[1:]].to_dict())
+
+
 def get_train_eval_data():
     s = perf_counter()
     all_data = []
@@ -109,19 +121,20 @@ def get_train_eval_data():
     env = lmdb.open(dbfilename, map_size=1099511627776)
     for excel_file in tqdm(glob(os.path.join(excel_path, "*.xlsx"))):
         for rows in get_valuable_info_by_excel(excel_file, excel_columns):
-            # print(rows["功能序号"])
-            prod_id = rows["功能序号"]
+            prod_id = rows["功能序号"] + excel_file.replace(".xlsx", "")
             requirement = read_lmdb(env, prod_id)
             if not requirement:
                 log.warning(f"No found PROJ: {prod_id}")
                 continue
             output = rows[excel_columns[1:]].to_dict()
-            temp_format["input"] = requirement
-            temp_format["output"] = str(output).replace("\\n", "")
-            all_data.append(temp_format)
+            temp_data = temp_format.copy()
+            temp_data["input"] = requirement
+            temp_data["output"] = str(output).replace("\\n", "")
+            all_data.append(temp_data)
     env.close()
     for _ in range(3):
         shuffle(all_data)
+    # print(all_data)
     train_data = all_data[: int(len(all_data) * 0.8)]
     eval_data = all_data[int(len(all_data) * 0.8) :]
     with open("wenzhouData/training_data.json", "w", encoding="utf-8") as json_file:
@@ -133,5 +146,5 @@ def get_train_eval_data():
 
 
 if __name__ == "__main__":
-    # export_db()
-    get_train_eval_data()
+    export_db()
+    # get_train_eval_data()
