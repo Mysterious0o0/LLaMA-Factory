@@ -40,11 +40,12 @@ def create_chat_box(
                 with gr.Row():
                     with gr.Column():
                         role = gr.Dropdown(choices=[Role.USER.value, Role.OBSERVATION.value], value=Role.USER.value)
-                        system = gr.Textbox(show_label=False)
-                        tools = gr.Textbox(show_label=False, lines=3)
+                        # system = gr.Textbox(show_label=False)
+                        # tools = gr.Textbox(show_label=False, lines=3)
+                        instruction = gr.Textbox(show_label=False)
 
-                    with gr.Column() as image_box:
-                        image = gr.Image(sources=["upload"], type="numpy")
+                    # with gr.Column() as image_box:
+                    #     image = gr.Image(sources=["upload"], type="numpy")
 
                 query = gr.Textbox(show_label=False, lines=8)
                 submit_btn = gr.Button(variant="primary")
@@ -55,15 +56,16 @@ def create_chat_box(
                 temperature = gr.Slider(minimum=0.01, maximum=1.5, value=0.95, step=0.01)
                 clear_btn = gr.Button()
 
-    tools.input(check_json_schema, inputs=[tools, engine.manager.get_elem_by_id("top.lang")])
+    # tools.input(check_json_schema, inputs=[tools, engine.manager.get_elem_by_id("top.lang")])
 
     submit_btn.click(
         engine.chatter.append,
-        [chatbot, messages, role, query],
+        [chatbot, messages, instruction, role, query],
         [chatbot, messages, query],
     ).then(
         engine.chatter.stream,
-        [chatbot, messages, system, tools, image, max_new_tokens, top_p, temperature],
+        # [chatbot, messages, system, tools, image, max_new_tokens, top_p, temperature],
+        [chatbot, messages, query, max_new_tokens, top_p, temperature],
         [chatbot, messages],
     )
     clear_btn.click(lambda: ([], []), outputs=[chatbot, messages])
@@ -74,10 +76,11 @@ def create_chat_box(
         dict(
             chat_box=chat_box,
             role=role,
-            system=system,
-            tools=tools,
-            image_box=image_box,
-            image=image,
+            # system=system,
+            instruction=instruction,
+            # tools=tools,
+            # image_box=image_box,
+            # image=image,
             query=query,
             submit_btn=submit_btn,
             max_new_tokens=max_new_tokens,

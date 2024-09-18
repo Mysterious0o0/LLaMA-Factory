@@ -1691,6 +1691,14 @@ LOCALES = {
             "placeholder": "툴 (선택 사항)",
         },
     },
+    "instruction": {
+        "en": {
+            "placeholder": "instruction (optional)",
+        },
+        "zh": {
+            "placeholder": "提示指令",
+        },
+    },
     "image": {
         "en": {
             "label": "Image (optional)",
