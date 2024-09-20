@@ -195,7 +195,7 @@ class WebChatModel(ChatModel):
         # if system is None:
         system = systems
         for new_text in self.stream_chat(
-            messages, system, tools, image, video, max_new_tokens=max_new_tokens, top_p=top_p, temperature=temperature
+            messages, system, tools, image, max_new_tokens=max_new_tokens, top_p=top_p, temperature=temperature
         ):
             response += new_text
             if tools:
