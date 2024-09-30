@@ -66,7 +66,7 @@ def create_chat_box(
         engine.chatter.stream,
         # [chatbot, messages, system, tools, image, max_new_tokens, top_p, temperature],
         [chatbot, messages, query, max_new_tokens, top_p, temperature],
-        [chatbot, messages],
+        [chatbot, messages, query],
     )
     clear_btn.click(lambda: ([], []), outputs=[chatbot, messages])
 
