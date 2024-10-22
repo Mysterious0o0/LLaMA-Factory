@@ -1,6 +1,6 @@
-.PHONY: quality style test
+.PHONY: quality style
 
-check_dirs := scripts src tests setup.py
+check_dirs := scripts src tests
 
 quality:
 	ruff check $(check_dirs)
@@ -9,6 +9,3 @@ quality:
 style:
 	ruff check $(check_dirs) --fix
 	ruff format $(check_dirs)
-
-test:
-	CUDA_VISIBLE_DEVICES= pytest tests/

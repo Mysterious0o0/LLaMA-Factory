@@ -4,66 +4,58 @@ Make sure to execute these commands in the `LLaMA-Factory` directory.
 
 ## Table of Contents
 
-- [LoRA Fine-Tuning](#lora-fine-tuning)
-- [QLoRA Fine-Tuning](#qlora-fine-tuning)
-- [Full-Parameter Fine-Tuning](#full-parameter-fine-tuning)
+- [LoRA Fine-Tuning on A Single GPU](#lora-fine-tuning-on-a-single-gpu)
+- [QLoRA Fine-Tuning on a Single GPU](#qlora-fine-tuning-on-a-single-gpu)
+- [LoRA Fine-Tuning on Multiple GPUs](#lora-fine-tuning-on-multiple-gpus)
+- [Full-Parameter Fine-Tuning on Multiple GPUs](#full-parameter-fine-tuning-on-multiple-gpus)
 - [Merging LoRA Adapters and Quantization](#merging-lora-adapters-and-quantization)
 - [Inferring LoRA Fine-Tuned Models](#inferring-lora-fine-tuned-models)
 - [Extras](#extras)
 
-Use `CUDA_VISIBLE_DEVICES` (GPU) or `ASCEND_RT_VISIBLE_DEVICES` (NPU) to choose computing devices.
-
 ## Examples
 
-### LoRA Fine-Tuning
+### LoRA Fine-Tuning on A Single GPU
 
 #### (Continuous) Pre-Training
 
 ```bash
-llamafactory-cli train examples/train_lora/llama3_lora_pretrain.yaml
+CUDA_VISIBLE_DEVICES=0 llamafactory-cli train examples/lora_single_gpu/llama3_lora_pretrain.yaml
 ```
 
 #### Supervised Fine-Tuning
 
 ```bash
-llamafactory-cli train examples/train_lora/llama3_lora_sft.yaml
-```
-
-#### Multimodal Supervised Fine-Tuning
-
-```bash
-llamafactory-cli train examples/train_lora/llava1_5_lora_sft.yaml
-llamafactory-cli train examples/train_lora/qwen2vl_lora_sft.yaml
-```
-
-#### DPO/ORPO/SimPO Training
-
-```bash
-llamafactory-cli train examples/train_lora/llama3_lora_dpo.yaml
-```
-
-#### Multimodal DPO/ORPO/SimPO Training
-
-```bash
-llamafactory-cli train examples/train_lora/qwen2vl_lora_dpo.yaml
+CUDA_VISIBLE_DEVICES=0 llamafactory-cli train examples/lora_single_gpu/llama3_lora_sft.yaml
 ```
 
 #### Reward Modeling
 
 ```bash
-llamafactory-cli train examples/train_lora/llama3_lora_reward.yaml
+CUDA_VISIBLE_DEVICES=0 llamafactory-cli train examples/lora_single_gpu/llama3_lora_reward.yaml
 ```
 
 #### PPO Training
 
 ```bash
-llamafactory-cli train examples/train_lora/llama3_lora_ppo.yaml
+CUDA_VISIBLE_DEVICES=0 llamafactory-cli train examples/lora_single_gpu/llama3_lora_ppo.yaml
 ```
 
-#### KTO Training
+#### DPO Training
 
 ```bash
-llamafactory-cli train examples/train_lora/llama3_lora_kto.yaml
+CUDA_VISIBLE_DEVICES=0 llamafactory-cli train examples/lora_single_gpu/llama3_lora_dpo.yaml
+```
+
+#### ORPO Training
+
+```bash
+CUDA_VISIBLE_DEVICES=0 llamafactory-cli train examples/lora_single_gpu/llama3_lora_orpo.yaml
+```
+
+#### Multimodal Supervised Fine-Tuning
+
+```bash
+CUDA_VISIBLE_DEVICES=0 llamafactory-cli train examples/lora_single_gpu/llava1_5_lora_sft.yaml
 ```
 
 #### Preprocess Dataset
@@ -71,85 +63,85 @@ llamafactory-cli train examples/train_lora/llama3_lora_kto.yaml
 It is useful for large dataset, use `tokenized_path` in config to load the preprocessed dataset.
 
 ```bash
-llamafactory-cli train examples/train_lora/llama3_preprocess.yaml
+CUDA_VISIBLE_DEVICES=0 llamafactory-cli train examples/lora_single_gpu/llama3_preprocess.yaml
 ```
 
 #### Evaluating on MMLU/CMMLU/C-Eval Benchmarks
 
 ```bash
-llamafactory-cli eval examples/train_lora/llama3_lora_eval.yaml
+CUDA_VISIBLE_DEVICES=0 llamafactory-cli eval examples/lora_single_gpu/llama3_lora_eval.yaml
 ```
 
 #### Batch Predicting and Computing BLEU and ROUGE Scores
 
 ```bash
-llamafactory-cli train examples/train_lora/llama3_lora_predict.yaml
+CUDA_VISIBLE_DEVICES=0 llamafactory-cli train examples/lora_single_gpu/llama3_lora_predict.yaml
 ```
 
-#### Supervised Fine-Tuning on Multiple Nodes
+### QLoRA Fine-Tuning on a Single GPU
+
+#### Supervised Fine-Tuning with 4/8-bit Bitsandbytes Quantization (Recommended)
 
 ```bash
-FORCE_TORCHRUN=1 NNODES=2 RANK=0 MASTER_ADDR=192.168.0.1 MASTER_PORT=29500 llamafactory-cli train examples/train_lora/llama3_lora_sft.yaml
-FORCE_TORCHRUN=1 NNODES=2 RANK=1 MASTER_ADDR=192.168.0.1 MASTER_PORT=29500 llamafactory-cli train examples/train_lora/llama3_lora_sft.yaml
-```
-
-#### Supervised Fine-Tuning with DeepSpeed ZeRO-3 (Weight Sharding)
-
-```bash
-FORCE_TORCHRUN=1 llamafactory-cli train examples/train_lora/llama3_lora_sft_ds3.yaml
-```
-
-### QLoRA Fine-Tuning
-
-#### Supervised Fine-Tuning with 4/8-bit Bitsandbytes/HQQ/EETQ Quantization (Recommended)
-
-```bash
-llamafactory-cli train examples/train_qlora/llama3_lora_sft_otfq.yaml
+CUDA_VISIBLE_DEVICES=0 llamafactory-cli train examples/qlora_single_gpu/llama3_lora_sft_bitsandbytes.yaml
 ```
 
 #### Supervised Fine-Tuning with 4/8-bit GPTQ Quantization
 
 ```bash
-llamafactory-cli train examples/train_qlora/llama3_lora_sft_gptq.yaml
+CUDA_VISIBLE_DEVICES=0 llamafactory-cli train examples/qlora_single_gpu/llama3_lora_sft_gptq.yaml
 ```
 
 #### Supervised Fine-Tuning with 4-bit AWQ Quantization
 
 ```bash
-llamafactory-cli train examples/train_qlora/llama3_lora_sft_awq.yaml
+CUDA_VISIBLE_DEVICES=0 llamafactory-cli train examples/qlora_single_gpu/llama3_lora_sft_awq.yaml
 ```
 
 #### Supervised Fine-Tuning with 2-bit AQLM Quantization
 
 ```bash
-llamafactory-cli train examples/train_qlora/llama3_lora_sft_aqlm.yaml
+CUDA_VISIBLE_DEVICES=0 llamafactory-cli train examples/qlora_single_gpu/llama3_lora_sft_aqlm.yaml
 ```
 
-### Full-Parameter Fine-Tuning
+### LoRA Fine-Tuning on Multiple GPUs
 
-#### Supervised Fine-Tuning on Single Node
+#### Supervised Fine-Tuning with Accelerate on Single Node
 
 ```bash
-FORCE_TORCHRUN=1 llamafactory-cli train examples/train_full/llama3_full_sft_ds3.yaml
+bash examples/lora_multi_gpu/single_node.sh
 ```
 
-#### Supervised Fine-Tuning on Multiple Nodes
+#### Supervised Fine-Tuning with Accelerate on Multiple Nodes
 
 ```bash
-FORCE_TORCHRUN=1 NNODES=2 RANK=0 MASTER_ADDR=192.168.0.1 MASTER_PORT=29500 llamafactory-cli train examples/train_full/llama3_full_sft_ds3.yaml
-FORCE_TORCHRUN=1 NNODES=2 RANK=1 MASTER_ADDR=192.168.0.1 MASTER_PORT=29500 llamafactory-cli train examples/train_full/llama3_full_sft_ds3.yaml
+bash examples/lora_multi_gpu/multi_node.sh
 ```
 
-#### Multimodal Supervised Fine-Tuning
+#### Supervised Fine-Tuning with DeepSpeed ZeRO-3 (Weight Sharding)
 
 ```bash
-FORCE_TORCHRUN=1 llamafactory-cli train examples/train_full/qwen2vl_full_sft.yaml
+bash examples/lora_multi_gpu/ds_zero3.sh
+```
+
+### Full-Parameter Fine-Tuning on Multiple GPUs
+
+#### Supervised Fine-Tuning with Accelerate on Single Node
+
+```bash
+bash examples/full_multi_gpu/single_node.sh
+```
+
+#### Supervised Fine-Tuning with Accelerate on Multiple Nodes
+
+```bash
+bash examples/full_multi_gpu/multi_node.sh
 ```
 
 #### Batch Predicting and Computing BLEU and ROUGE Scores
 
 ```bash
-llamafactory-cli train examples/train_full/llama3_full_predict.yaml
+bash examples/full_multi_gpu/predict.sh
 ```
 
 ### Merging LoRA Adapters and Quantization
@@ -159,13 +151,13 @@ llamafactory-cli train examples/train_full/llama3_full_predict.yaml
 Note: DO NOT use quantized model or `quantization_bit` when merging LoRA adapters.
 
 ```bash
-llamafactory-cli export examples/merge_lora/llama3_lora_sft.yaml
+CUDA_VISIBLE_DEVICES=0 llamafactory-cli export examples/merge_lora/llama3_lora_sft.yaml
 ```
 
 #### Quantizing Model using AutoGPTQ
 
 ```bash
-llamafactory-cli export examples/merge_lora/llama3_gptq.yaml
+CUDA_VISIBLE_DEVICES=0 llamafactory-cli export examples/merge_lora/llama3_gptq.yaml
 ```
 
 ### Inferring LoRA Fine-Tuned Models
@@ -173,19 +165,19 @@ llamafactory-cli export examples/merge_lora/llama3_gptq.yaml
 #### Use CLI
 
 ```bash
-llamafactory-cli chat examples/inference/llama3_lora_sft.yaml
+CUDA_VISIBLE_DEVICES=0 llamafactory-cli chat examples/merge_lora/llama3_lora_sft.yaml
 ```
 
 #### Use Web UI
 
 ```bash
-llamafactory-cli webchat examples/inference/llama3_lora_sft.yaml
+CUDA_VISIBLE_DEVICES=0 llamafactory-cli webchat examples/merge_lora/llama3_lora_sft.yaml
 ```
 
 #### Launch OpenAI-style API
 
 ```bash
-llamafactory-cli api examples/inference/llama3_lora_sft.yaml
+CUDA_VISIBLE_DEVICES=0 llamafactory-cli api examples/merge_lora/llama3_lora_sft.yaml
 ```
 
 ### Extras
@@ -193,48 +185,36 @@ llamafactory-cli api examples/inference/llama3_lora_sft.yaml
 #### Full-Parameter Fine-Tuning using GaLore
 
 ```bash
-llamafactory-cli train examples/extras/galore/llama3_full_sft.yaml
+CUDA_VISIBLE_DEVICES=0 llamafactory-cli train examples/extras/galore/llama3_full_sft.yaml
 ```
 
 #### Full-Parameter Fine-Tuning using BAdam
 
 ```bash
-llamafactory-cli train examples/extras/badam/llama3_full_sft.yaml
-```
-
-#### Full-Parameter Fine-Tuning using Adam-mini
-
-```bash
-llamafactory-cli train examples/extras/adam_mini/qwen2_full_sft.yaml
+CUDA_VISIBLE_DEVICES=0 llamafactory-cli train examples/extras/badam/llama3_full_sft.yaml
 ```
 
 #### LoRA+ Fine-Tuning
 
 ```bash
-llamafactory-cli train examples/extras/loraplus/llama3_lora_sft.yaml
-```
-
-#### PiSSA Fine-Tuning
-
-```bash
-llamafactory-cli train examples/extras/pissa/llama3_lora_sft.yaml
+CUDA_VISIBLE_DEVICES=0 llamafactory-cli train examples/extras/loraplus/llama3_lora_sft.yaml
 ```
 
 #### Mixture-of-Depths Fine-Tuning
 
 ```bash
-llamafactory-cli train examples/extras/mod/llama3_full_sft.yaml
+CUDA_VISIBLE_DEVICES=0 llamafactory-cli train examples/extras/mod/llama3_full_sft.yaml
 ```
 
 #### LLaMA-Pro Fine-Tuning
 
 ```bash
 bash examples/extras/llama_pro/expand.sh
-llamafactory-cli train examples/extras/llama_pro/llama3_freeze_sft.yaml
+CUDA_VISIBLE_DEVICES=0 llamafactory-cli train examples/extras/llama_pro/llama3_freeze_sft.yaml
 ```
 
 #### FSDP+QLoRA Fine-Tuning
 
 ```bash
-bash examples/extras/fsdp_qlora/train.sh
+bash examples/extras/fsdp_qlora/single_node.sh
 ```

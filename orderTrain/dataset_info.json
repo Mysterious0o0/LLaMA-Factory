@@ -1,0 +1,13 @@
+{
+  "order_data": {
+    "file_name": "order_data.json",
+    "formatting": "alpaca",
+    "columns": {
+      "prompt": "instruction",
+      "query": "input",
+      "response": "output",
+      "system": "system",
+      "history": "history"
+    }
+  }
+}

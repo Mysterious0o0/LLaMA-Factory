@@ -11,7 +11,6 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
 import os
 
 import datasets
@@ -155,7 +154,7 @@ class MMLU(datasets.GeneratorBasedBuilder):
         ]
 
     def _generate_examples(self, filepath):
-        df = pd.read_csv(filepath, header=None)
+        df = pd.read_csv(filepath)
         df.columns = ["question", "A", "B", "C", "D", "answer"]
 
         for i, instance in enumerate(df.to_dict(orient="records")):
