@@ -20,6 +20,7 @@ import os
 from typing import TYPE_CHECKING, Tuple, Union
 
 import torch
+import torch.distributed as dist
 import transformers.dynamic_module_utils
 from transformers import InfNanRemoveLogitsProcessor, LogitsProcessorList
 from transformers.dynamic_module_utils import get_relative_imports
@@ -32,7 +33,7 @@ from transformers.utils import (
 )
 from transformers.utils.versions import require_version
 
-from .logging import get_logger
+from . import logging
 
 
 _is_fp16_available = is_torch_npu_available() or is_torch_cuda_available()
@@ -48,7 +49,7 @@ if TYPE_CHECKING:
     from ..hparams import ModelArguments
 
 
-logger = get_logger(__name__)
+logger = logging.get_logger(__name__)
 
 
 class AverageMeter:
@@ -76,11 +77,11 @@ def check_dependencies() -> None:
     r"""
     Checks the version of the required packages.
     """
-    if os.environ.get("DISABLE_VERSION_CHECK", "0").lower() in ["true", "1"]:
-        logger.warning("Version checking has been disabled, may lead to unexpected behaviors.")
+    if os.getenv("DISABLE_VERSION_CHECK", "0").lower() in ["true", "1"]:
+        logger.warning_once("Version checking has been disabled, may lead to unexpected behaviors.")
     else:
         require_version("transformers>=4.41.2,<=4.46.1", "To fix: pip install transformers>=4.41.2,<=4.46.1")
-        require_version("datasets>=2.16.0,<=3.0.2", "To fix: pip install datasets>=2.16.0,<=3.0.2")
+        require_version("datasets>=2.16.0,<=3.1.0", "To fix: pip install datasets>=2.16.0,<=3.1.0")
         require_version("accelerate>=0.34.0,<=1.0.1", "To fix: pip install accelerate>=0.34.0,<=1.0.1")
         require_version("peft>=0.11.1,<=0.12.0", "To fix: pip install peft>=0.11.1,<=0.12.0")
         require_version("trl>=0.8.6,<=0.9.6", "To fix: pip install trl>=0.8.6,<=0.9.6")
@@ -263,3 +264,11 @@ def use_modelscope() -> bool:
 
 def use_openmind() -> bool:
     return os.environ.get("USE_OPENMIND_HUB", "0").lower() in ["true", "1"]
+
+
+def cal_effective_tokens(effective_token_num, epoch, train_runtime) -> int:
+    r"""
+    calculate effective tokens.
+    """
+    result = effective_token_num * epoch / train_runtime
+    return result / dist.get_world_size() if dist.is_initialized() else result

@@ -598,6 +598,33 @@ register_model_group(
 
 register_model_group(
     models={
+        "Index-1.9B-Chat": {
+            DownloadSource.DEFAULT: "IndexTeam/Index-1.9B-Chat",
+            DownloadSource.MODELSCOPE: "IndexTeam/Index-1.9B-Chat",
+        },
+        "Index-1.9B-Character-Chat": {
+            DownloadSource.DEFAULT: "IndexTeam/Index-1.9B-Character",
+            DownloadSource.MODELSCOPE: "IndexTeam/Index-1.9B-Character",
+        },
+        "Index-1.9B-Base": {
+            DownloadSource.DEFAULT: "IndexTeam/Index-1.9B",
+            DownloadSource.MODELSCOPE: "IndexTeam/Index-1.9B",
+        },
+        "Index-1.9B-Base-Pure": {
+            DownloadSource.DEFAULT: "IndexTeam/Index-1.9B-Pure",
+            DownloadSource.MODELSCOPE: "IndexTeam/Index-1.9B-Pure",
+        },
+        "Index-1.9B-Chat-32K": {
+            DownloadSource.DEFAULT: "IndexTeam/Index-1.9B-32K",
+            DownloadSource.MODELSCOPE: "IndexTeam/Index-1.9B-32K",
+        },
+    },
+    template="index",
+)
+
+
+register_model_group(
+    models={
         "InternLM-7B": {
             DownloadSource.DEFAULT: "internlm/internlm-7b",
             DownloadSource.MODELSCOPE: "Shanghai_AI_Laboratory/internlm-7b",
@@ -1080,6 +1107,29 @@ register_model_group(
 
 register_model_group(
     models={
+        "OpenCoder-1.5B-Base": {
+            DownloadSource.DEFAULT: "infly/OpenCoder-1.5B-Base",
+            DownloadSource.MODELSCOPE: "infly/OpenCoder-1.5B-Base",
+        },
+        "OpenCoder-8B-Base": {
+            DownloadSource.DEFAULT: "infly/OpenCoder-8B-Base",
+            DownloadSource.MODELSCOPE: "infly/OpenCoder-8B-Base",
+        },
+        "OpenCoder-1.5B-Instruct": {
+            DownloadSource.DEFAULT: "infly/OpenCoder-1.5B-Instruct",
+            DownloadSource.MODELSCOPE: "infly/OpenCoder-1.5B-Instruct",
+        },
+        "OpenCoder-8B-Instruct": {
+            DownloadSource.DEFAULT: "infly/OpenCoder-8B-Instruct",
+            DownloadSource.MODELSCOPE: "infly/OpenCoder-8B-Instruct",
+        },
+    },
+    template="opencoder",
+)
+
+
+register_model_group(
+    models={
         "Orion-14B-Base": {
             DownloadSource.DEFAULT: "OrionStarAI/Orion-14B-Base",
             DownloadSource.MODELSCOPE: "OrionStarAI/Orion-14B-Base",
@@ -1157,14 +1207,6 @@ register_model_group(
             DownloadSource.DEFAULT: "microsoft/Phi-3-mini-128k-instruct",
             DownloadSource.MODELSCOPE: "LLM-Research/Phi-3-mini-128k-instruct",
         },
-        "Phi-3-7B-8k-Instruct": {
-            DownloadSource.DEFAULT: "microsoft/Phi-3-small-8k-instruct",
-            DownloadSource.MODELSCOPE: "LLM-Research/Phi-3-small-8k-instruct",
-        },
-        "Phi-3-7B-128k-Instruct": {
-            DownloadSource.DEFAULT: "microsoft/Phi-3-small-128k-instruct",
-            DownloadSource.MODELSCOPE: "LLM-Research/Phi-3-small-128k-instruct",
-        },
         "Phi-3-14B-8k-Instruct": {
             DownloadSource.DEFAULT: "microsoft/Phi-3-medium-4k-instruct",
             DownloadSource.MODELSCOPE: "LLM-Research/Phi-3-medium-4k-instruct",
@@ -1175,6 +1217,21 @@ register_model_group(
         },
     },
     template="phi",
+)
+
+
+register_model_group(
+    models={
+        "Phi-3-7B-8k-Instruct": {
+            DownloadSource.DEFAULT: "microsoft/Phi-3-small-8k-instruct",
+            DownloadSource.MODELSCOPE: "LLM-Research/Phi-3-small-8k-instruct",
+        },
+        "Phi-3-7B-128k-Instruct": {
+            DownloadSource.DEFAULT: "microsoft/Phi-3-small-128k-instruct",
+            DownloadSource.MODELSCOPE: "LLM-Research/Phi-3-small-128k-instruct",
+        },
+    },
+    template="phi_small",
 )
 
 
@@ -1680,21 +1737,53 @@ register_model_group(
             DownloadSource.DEFAULT: "Qwen/Qwen2.5-72B-Instruct-AWQ",
             DownloadSource.MODELSCOPE: "qwen/Qwen2.5-72B-Instruct-AWQ",
         },
+        "Qwen2.5-Coder-0.5B": {
+            DownloadSource.DEFAULT: "Qwen/Qwen2.5-Coder-0.5B",
+            DownloadSource.MODELSCOPE: "qwen/Qwen2.5-Coder-0.5B",
+        },
         "Qwen2.5-Coder-1.5B": {
             DownloadSource.DEFAULT: "Qwen/Qwen2.5-Coder-1.5B",
             DownloadSource.MODELSCOPE: "qwen/Qwen2.5-Coder-1.5B",
+        },
+        "Qwen2.5-Coder-3B": {
+            DownloadSource.DEFAULT: "Qwen/Qwen2.5-Coder-3B",
+            DownloadSource.MODELSCOPE: "qwen/Qwen2.5-Coder-3B",
         },
         "Qwen2.5-Coder-7B": {
             DownloadSource.DEFAULT: "Qwen/Qwen2.5-Coder-7B",
             DownloadSource.MODELSCOPE: "qwen/Qwen2.5-Coder-7B",
         },
+        "Qwen2.5-Coder-14B": {
+            DownloadSource.DEFAULT: "Qwen/Qwen2.5-Coder-14B",
+            DownloadSource.MODELSCOPE: "qwen/Qwen2.5-Coder-14B",
+        },
+        "Qwen2.5-Coder-32B": {
+            DownloadSource.DEFAULT: "Qwen/Qwen2.5-Coder-32B",
+            DownloadSource.MODELSCOPE: "qwen/Qwen2.5-Coder-32B",
+        },
+        "Qwen2.5-Coder-0.5B-Instruct": {
+            DownloadSource.DEFAULT: "Qwen/Qwen2.5-Coder-0.5B-Instruct",
+            DownloadSource.MODELSCOPE: "qwen/Qwen2.5-Coder-0.5B-Instruct",
+        },
         "Qwen2.5-Coder-1.5B-Instruct": {
             DownloadSource.DEFAULT: "Qwen/Qwen2.5-Coder-1.5B-Instruct",
             DownloadSource.MODELSCOPE: "qwen/Qwen2.5-Coder-1.5B-Instruct",
         },
+        "Qwen2.5-Coder-3B-Instruct": {
+            DownloadSource.DEFAULT: "Qwen/Qwen2.5-Coder-3B-Instruct",
+            DownloadSource.MODELSCOPE: "qwen/Qwen2.5-Coder-3B-Instruct",
+        },
         "Qwen2.5-Coder-7B-Instruct": {
             DownloadSource.DEFAULT: "Qwen/Qwen2.5-Coder-7B-Instruct",
             DownloadSource.MODELSCOPE: "qwen/Qwen2.5-Coder-7B-Instruct",
+        },
+        "Qwen2.5-Coder-14B-Instruct": {
+            DownloadSource.DEFAULT: "Qwen/Qwen2.5-Coder-14B-Instruct",
+            DownloadSource.MODELSCOPE: "qwen/Qwen2.5-Coder-14B-Instruct",
+        },
+        "Qwen2.5-Coder-32B-Instruct": {
+            DownloadSource.DEFAULT: "Qwen/Qwen2.5-Coder-32B-Instruct",
+            DownloadSource.MODELSCOPE: "qwen/Qwen2.5-Coder-32B-Instruct",
         },
         "Qwen2.5-Math-1.5B": {
             DownloadSource.DEFAULT: "Qwen/Qwen2.5-Math-1.5B",
