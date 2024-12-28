@@ -19,7 +19,7 @@ import warnings
 from collections import defaultdict
 from contextlib import nullcontext
 from types import MethodType
-from typing import TYPE_CHECKING, Dict, Literal, Optional, Tuple, Union
+from typing import TYPE_CHECKING, Dict, List, Literal, Optional, Tuple, Union
 
 import torch
 from transformers import Trainer
@@ -77,6 +77,7 @@ class CustomKTOTrainer(KTOTrainer):
         self.ftx_gamma = finetuning_args.pref_ftx
 
         Trainer.__init__(self, model=model, **kwargs)
+        self.model_accepts_loss_kwargs = False  # overwrite trainer's default behavior
         if not hasattr(self, "accelerator"):
             raise AttributeError("Please update `transformers`.")
 
@@ -119,6 +120,9 @@ class CustomKTOTrainer(KTOTrainer):
         r"""
         Replaces the sequential sampler of KTO Trainer created by trl with the random sampler.
         """
+        if self.finetuning_args.disable_shuffling:
+            return torch.utils.data.SequentialSampler(self.train_dataset)
+
         return Trainer._get_train_sampler(self)
 
     @override
@@ -245,17 +249,18 @@ class CustomKTOTrainer(KTOTrainer):
         return losses, metrics
 
     @override
-    def compute_loss(self, model, inputs, return_outputs=False, **kwargs):
+    def compute_loss(
+        self, model: "PreTrainedModel", inputs: Dict[str, "torch.Tensor"], return_outputs: bool = False, **kwargs
+    ) -> Union["torch.Tensor", Tuple["torch.Tensor", List["torch.Tensor"]]]:
         r"""
-        Fixes the loss value for transformers 4.46.0.
-        https://github.com/huggingface/transformers/blob/v4.46.0/src/transformers/trainer.py#L3605
+        Fixes the loss value. See https://github.com/huggingface/transformers/pull/35438 for details.
         """
         loss = super().compute_loss(model, inputs, return_outputs)
-        if is_transformers_version_equal_to_4_46() and kwargs.pop("num_items_in_batch", False):
+        if is_transformers_version_equal_to_4_46() and kwargs.get("num_items_in_batch"):
             if return_outputs:
-                return (loss[0] / self.args.gradient_accumulation_steps, *loss[1:])
+                loss = (loss[0] / self.args.gradient_accumulation_steps, *loss[1:])
             else:
-                return loss / self.args.gradient_accumulation_steps
+                loss = loss / self.args.gradient_accumulation_steps
 
         return loss
 
